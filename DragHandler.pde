@@ -11,6 +11,10 @@ void mousePressed() {
       lightDragging = l;
     }
   }  
+  
+  if (lightDragging == null) {
+    surf.setPatternCenter(new PVector(mouseX, mouseY));  
+  }
 }
 
 void mouseDragged() {
