@@ -22,11 +22,15 @@ void setupGUI() {
      .setCaptionLabel(" Spacing"); 
   
   cp5.addSlider("changeLightSize")
-     .setPosition(30, height-30)
+     .setPosition(260, height-60)
      .setSize(160,20)
      .setRange(1,100)
      .setValue(10)
-     .setCaptionLabel(" Light Size");      
+     .setCaptionLabel(" Light Size");
+
+  cp5.addToggle("drawIDs", drawIDs, 30, height-30, 20,20)
+     .setCaptionLabel(" Show Light IDs");
+  cp5.getController("drawIDs").getCaptionLabel().align(ControlP5.RIGHT_OUTSIDE, ControlP5.CENTER);     
      
   // Surface Pattern properties
   // ---------------------------------------------------

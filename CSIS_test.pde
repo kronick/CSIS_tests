@@ -5,6 +5,7 @@ import processing.serial.*;
 Surface surf;
 ArrayList<Light> lights;
 boolean drawSurf = false;
+boolean drawIDs = false;
 
 ControlP5 cp5;
 
@@ -16,6 +17,8 @@ float lightSpacing = 15;
 float lightSize = 10;
 
 static final String MAP_FILE = "world_grid_425.svg";
+
+PFont labelFont;
 
 // DMX Output
 boolean dmxOutputEnabled = false;
@@ -35,7 +38,20 @@ void setup() {
   setupGUI();
   
   dmxOutput = new DmxP512(this, DMXPRO_UNIVERSE_SIZE, false);
-  if(dmxOutputEnabled) dmxOutput.setupDmxPro(DMXPRO_PORT, DMXPRO_BAUDRATE);
+  if(dmxOutputEnabled) {
+    try {
+      dmxOutput.setupDmxPro(DMXPRO_PORT, DMXPRO_BAUDRATE);
+      dmxOutputEnabled = true;
+    }
+    catch(Exception e) {
+      println("Couldn't open port for DMX output: " + e);
+      dmxOutputEnabled = false;
+    }
+  }
+  
+  labelFont = loadFont("HelveticaNeueLTCom-MdCn-12.vlw");
+  textFont(labelFont, 10);
+  textAlign(CENTER, CENTER);
   
   frameRate(60);
 }
@@ -65,7 +81,7 @@ void changeArrangement(int a, boolean setSpacingSize) {
       float w = spacing * 2;
       for(int i=0; i<9; i++) {
         PVector p = new PVector(width/2 - w/2 + i%3*spacing, height/2 - w/2 + i/3*spacing);
-        lights.add(new Light(dmxOutput, p, surf, lightSize));
+        lights.add(new Light(i, p, surf, lightSize));
       }
       break;
     case BIG_GRID:
@@ -77,7 +93,7 @@ void changeArrangement(int a, boolean setSpacingSize) {
       float h = spacing * 15;
       for(int i=0; i<400; i++) {
         PVector p = new PVector(width/2 - w/2 + i%25*spacing, height/2 - h/2 + i/25*spacing);
-        lights.add(new Light(dmxOutput, p, surf, lightSize));
+        lights.add(new Light(i, p, surf, lightSize));
       }    
       break;
     case WORLD_MAP:
@@ -103,7 +119,7 @@ void changeArrangement(int a, boolean setSpacingSize) {
             PVector p = new PVector(el.getInt("cx"), el.getInt("cy"));
             p.mult(scaleFactor);
             p.add(new PVector(width/2 - w/2*scaleFactor, height/2 - h/2*scaleFactor));
-            lights.add(new Light(dmxOutput, p, surf, lightSize));
+            lights.add(new Light(i, p, surf, lightSize));
           }
           else {
             println("Element not a circle: " + el.toString());
@@ -125,7 +141,14 @@ void draw() {
     surf.draw();
   for(Light l : lights) {
     l.update();
+    if(dmxOutputEnabled) {
+      dmxOutput.set(l.getID(), (int)l.getValue());
+    }
     l.draw();
+    if(drawIDs) {
+      fill(200);
+      text(l.getID(), l.getPosition().x, l.getPosition().y);
+    }
   }
   
 }

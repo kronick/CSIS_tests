@@ -7,13 +7,13 @@ public class Light {
   static final float DEFAULT_MIN = 0;
   static final float DEFAULT_MAX = 255;
   
-  DmxP512 output;
+  private int id;
   
   private float size;
   static final float DEFAULT_SIZE = 18;
   
-  public Light(DmxP512 o, PVector p, Surface surf, float min, float max, float s) {
-    this.output = o;
+  public Light(int id, PVector p, Surface surf, float min, float max, float s) {
+    this.id = id+1;
     this.position = p.get();
     this.minValue = min;
     this.maxValue = max;  
@@ -21,8 +21,8 @@ public class Light {
     this.surf = surf;
   }
   
-  public Light(DmxP512 o, PVector p, Surface surf, float s) {
-    this.output = o;
+  public Light(int id, PVector p, Surface surf, float s) {
+    this.id = id+1;
     this.position = p.get();
     this.minValue = DEFAULT_MIN;
     this.maxValue = DEFAULT_MAX;
@@ -30,8 +30,8 @@ public class Light {
     this.surf = surf;
   }
   
-  public Light(DmxP512 o, PVector p, Surface surf) {
-    this.output = o;
+  public Light(int id, PVector p, Surface surf) {
+    this.id = id+1;
     this.position = p.get();
     this.minValue = DEFAULT_MIN;
     this.maxValue = DEFAULT_MAX;
@@ -61,6 +61,8 @@ public class Light {
     this.value = v;
     constrain(this.value, minValue, maxValue);
   }
+  
+  public int getID() { return this.id; }
   
   public float getSize() { return this.size; }
   public void  setSize(float s) { this.size = abs(s); }
