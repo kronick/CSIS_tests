@@ -7,10 +7,13 @@ public class Light {
   static final float DEFAULT_MIN = 0;
   static final float DEFAULT_MAX = 255;
   
-  private float size;
-  static final float DEFAULT_SIZE = 10;
+  DmxP512 output;
   
-  public Light(PVector p, Surface surf, float min, float max, float s) {
+  private float size;
+  static final float DEFAULT_SIZE = 18;
+  
+  public Light(DmxP512 o, PVector p, Surface surf, float min, float max, float s) {
+    this.output = o;
     this.position = p.get();
     this.minValue = min;
     this.maxValue = max;  
@@ -18,7 +21,17 @@ public class Light {
     this.surf = surf;
   }
   
-  public Light(PVector p, Surface surf) {
+  public Light(DmxP512 o, PVector p, Surface surf, float s) {
+    this.output = o;
+    this.position = p.get();
+    this.minValue = DEFAULT_MIN;
+    this.maxValue = DEFAULT_MAX;
+    this.size = s;    
+    this.surf = surf;
+  }
+  
+  public Light(DmxP512 o, PVector p, Surface surf) {
+    this.output = o;
     this.position = p.get();
     this.minValue = DEFAULT_MIN;
     this.maxValue = DEFAULT_MAX;
@@ -32,7 +45,7 @@ public class Light {
   
   public void draw() {
     fill(value);
-    stroke(100);
+    stroke(50);
     ellipse(position.x, position.y,  this.size, this.size);
   }
   
