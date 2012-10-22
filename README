@@ -1,0 +1,8 @@
+Requirements:
+Processing 2.04b
+DmxP512 library: http://motscousus.com/stuff/2011-01_dmxP512/
+ControlP5: http://www.sojamo.de/libraries/controlP5/
+
+(Download both and place in ~/Documents/Processing/libraries/)
+
+Serial library is broken on Windows 64-bit, works fine on OSX.
